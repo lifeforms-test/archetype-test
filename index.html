@@ -3,183 +3,331 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Архетип — тест (24)</title>
+  <title>АРХЕТИП — тест</title>
+
   <style>
     :root{
-      --bg:#0b0f14;
-      --panel:#0f1720;
-      --panel2:#0c131b;
-      --text:#e8eef6;
-      --muted:rgba(232,238,246,.72);
-      --line:rgba(232,238,246,.14);
-      --line2:rgba(232,238,246,.22);
-      --accent:#e8eef6;
-      --radius:16px;
-      --pad:18px;
-      --max:860px;
+      --bg:#070a0e;
+      --ink:#e9ecef;
+      --muted:rgba(233,236,239,.72);
+      --dim:rgba(233,236,239,.48);
+      --line:rgba(233,236,239,.18);
+      --line2:rgba(233,236,239,.26);
+      --max:1120px;
+      --pad:28px;
+      --pad2:22px;
+      --radius:0px;
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
     }
 
     html, body { height: 100%; }
     body{
       margin:0;
-      background: radial-gradient(1200px 600px at 20% 10%, rgba(232,238,246,.06), transparent 55%),
-                  radial-gradient(900px 500px at 90% 30%, rgba(232,238,246,.04), transparent 60%),
-                  var(--bg);
-      color:var(--text);
+      color:var(--ink);
       font-family: var(--font);
+      background: var(--bg);
+      overflow-x:hidden;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
-    .wrap{ max-width: var(--max); margin:0 auto; padding: 24px 14px 40px; }
-    .card{
-      background: linear-gradient(180deg, rgba(15,23,32,.92), rgba(12,19,27,.96));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 22px;
-      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+    /* ======= Background: grain + faint geometry ======= */
+    .stage{
+      min-height: 100%;
+      position: relative;
+      isolation: isolate;
+      background:
+        radial-gradient(1200px 700px at 20% 20%, rgba(233,236,239,.06), transparent 55%),
+        radial-gradient(900px 540px at 80% 30%, rgba(233,236,239,.04), transparent 60%),
+        radial-gradient(1000px 800px at 60% 85%, rgba(233,236,239,.03), transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,.03), transparent 40%, rgba(0,0,0,.22));
+    }
+    .stage::before{
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(233,236,239,.045) 0 1px, transparent 1px 28px),
+        repeating-linear-gradient(90deg, rgba(233,236,239,.03) 0 1px, transparent 1px 34px);
+      opacity:.18;
+      mix-blend-mode: screen;
+      z-index:0;
+    }
+    .stage::after{
+      content:"";
+      position:absolute; inset:-20%;
+      pointer-events:none;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cdefs%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='800' height='800' filter='url(%23n)' opacity='.33'/%3E%3C/svg%3E");
+      opacity:.12;
+      mix-blend-mode: overlay;
+      z-index:0;
+      transform: rotate(-2deg);
     }
 
-    h1{
-      font-size: 22px;
-      margin: 0 0 10px;
-      letter-spacing: .2px;
+    .wrap{
+      position: relative;
+      z-index:1;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--pad);
     }
-    .brand{
+
+    /* ======= Top bar ======= */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 0 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .top-left, .top-right{
+      display:flex;
+      gap: 18px;
+      align-items:center;
+      min-width: 180px;
+    }
+    .top-left a, .top-right a{
+      color: var(--muted);
+      text-decoration:none;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
       font-family: var(--mono);
-      font-size: 13px;
-      letter-spacing: .8px;
+    }
+    .top-left a:hover, .top-right a:hover{
+      color: var(--ink);
+    }
+    .top-center{
+      text-align:center;
+      flex:1;
+      font-family: var(--mono);
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      font-size: 16px;
+      color: var(--ink);
+      opacity:.92;
+    }
+
+    /* ======= Main area ======= */
+    .main{
+      padding: 26px 0 40px;
+      display:grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 36px;
+      align-items: start;
+    }
+    @media (max-width: 980px){
+      .wrap{ padding: 0 16px; }
+      .top-left, .top-right{ min-width: auto; }
+      .main{ grid-template-columns: 1fr; gap: 20px; }
+    }
+
+    .kicker{
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 10px;
+      margin: 10px 0 10px;
     }
-    .lead{ line-height: 1.6; color: var(--muted); margin: 0 0 16px; }
-    .note{ font-size: 12px; line-height: 1.6; color: var(--muted); margin: 0; }
 
-    .row{ display:flex; gap:10px; flex-wrap: wrap; align-items:center; justify-content: space-between; }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      font-size: 12px;
+    .bigTitle{
+      font-family: var(--serif);
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-size: clamp(38px, 6vw, 66px);
+      line-height: 1.02;
+      margin: 6px 0 18px;
+    }
+
+    .bodyText{
       color: var(--muted);
-      font-family: var(--mono);
+      line-height: 1.7;
+      font-size: 15px;
+      max-width: 58ch;
+      margin: 0 0 22px;
     }
 
-    .progress{
-      height: 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      overflow: hidden;
-      margin: 12px 0 14px;
-    }
-    .bar{
-      height: 100%;
-      width: 0%;
-      background: rgba(232,238,246,.72);
+    .divider{
+      height:1px;
+      background: var(--line);
+      margin: 16px 0 18px;
+      width: min(520px, 100%);
     }
 
-    .qtitle{
-      font-size: 18px;
-      line-height: 1.35;
-      margin: 10px 0 12px;
-      letter-spacing: .1px;
+    /* ======= Answers ======= */
+    .answers{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      width: min(560px, 100%);
     }
-
-    .answers{ display:grid; gap: 10px; margin-top: 6px; }
-    button.choice{
-      width:100%;
-      text-align:left;
-      padding: 12px 12px;
-      border-radius: 14px;
+    .choice{
+      display:flex;
+      align-items:flex-start;
+      gap: 12px;
+      padding: 14px 14px;
       border: 1px solid var(--line);
       background: rgba(255,255,255,.02);
-      color: var(--text);
+      color: var(--ink);
       cursor:pointer;
-      transition: transform .03s ease, border-color .12s ease, background .12s ease;
-      line-height: 1.35;
+      user-select:none;
+      transition: border-color .12s ease, background .12s ease;
     }
-    button.choice:hover{
+    .choice:hover{
       border-color: var(--line2);
       background: rgba(255,255,255,.035);
     }
-    button.choice:active{
+    .choice:active{
       transform: translateY(1px);
     }
+    .bullet{
+      width: 10px; height: 10px;
+      border: 1px solid var(--line2);
+      margin-top: 4px;
+      flex: 0 0 auto;
+      opacity:.9;
+    }
+    .choiceText{
+      line-height: 1.55;
+      font-size: 15px;
+      color: var(--ink);
+    }
 
-    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content: space-between; margin-top: 14px; }
-    .btn{
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.02);
-      color: var(--text);
-      cursor:pointer;
+    /* ======= Right panel (quiet) ======= */
+    .side{
+      padding-top: 10px;
+      color: var(--muted);
+    }
+    .sideBlock{
+      border-left: 1px solid var(--line);
+      padding-left: 18px;
+      margin-bottom: 18px;
+    }
+    .sideLabel{
       font-family: var(--mono);
       font-size: 12px;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-    }
-    .btn:hover{ border-color: var(--line2); }
-    .btn:disabled{ opacity: .45; cursor: not-allowed; }
-
-    .muted{ color: var(--muted); }
-    .mini{ font-size: 12px; line-height: 1.55; color: var(--muted); }
-    .spacer{ height: 14px; }
-
-    .grid2{ display:grid; gap:12px; grid-template-columns: 1fr; }
-    @media (min-width: 760px){ .grid2{ grid-template-columns: 1fr 1fr; } }
-
-    .resultTitle{
-      font-size: 18px;
-      margin: 0 0 6px;
-      letter-spacing: .1px;
-    }
-    .sectionTitle{
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing: .8px;
+      letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--muted);
       margin: 0 0 8px;
     }
-
-    .hr{
-      height:1px; background: var(--line); margin: 14px 0;
+    .sideText{
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 0;
+      color: var(--muted);
+    }
+    .miniRow{
+      display:flex; gap: 10px; flex-wrap: wrap;
+      margin-top: 12px;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .06em;
+    }
+    .pill{
+      border: 1px solid var(--line);
+      padding: 6px 10px;
+      background: rgba(255,255,255,.02);
     }
 
-    a.smallLink{ color: var(--muted); text-decoration: none; border-bottom: 1px dotted var(--line2); }
-    a.smallLink:hover{ color: var(--text); border-bottom-color: var(--text); }
+    /* ======= Bottom controls ======= */
+    .controls{
+      margin-top: 18px;
+      display:flex;
+      gap: 14px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+    .btn{
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.01);
+      color: var(--ink);
+      padding: 12px 18px;
+      font-family: var(--mono);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      transition: background .12s ease, border-color .12s ease;
+    }
+    .btn:hover{
+      border-color: rgba(233,236,239,.35);
+      background: rgba(255,255,255,.03);
+    }
+    .btn:disabled{
+      opacity: .4;
+      cursor:not-allowed;
+    }
+    .linkBtn{
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--mono);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      padding: 12px 8px;
+    }
+    .linkBtn:hover{ color: var(--ink); }
+
+    /* Progress line (thin) */
+    .progressLine{
+      width: min(560px, 100%);
+      height: 1px;
+      background: var(--line);
+      position: relative;
+      margin: 14px 0 18px;
+    }
+    .progressLine > i{
+      display:block;
+      height: 1px;
+      width: 0%;
+      background: rgba(233,236,239,.72);
+    }
+
+    /* Small helper */
+    .muted{ color: var(--muted); }
+    .hidden{ display:none !important; }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="card" id="app"></div>
-    <div class="spacer"></div>
-    <div class="mini muted">
-      Подсказка: вопросы и ответы каждый раз перемешиваются. Это специально 🙂
+  <div class="stage">
+    <div class="wrap">
+      <div class="topbar">
+        <div class="top-left">
+          <a href="#" id="aboutLink">ОБ АРХЕТИПАХ</a>
+          <a href="#" id="settingsLink">НАСТРОЙКА</a>
+        </div>
+        <div class="top-center">АРХЕТИП</div>
+        <div class="top-right">
+          <a href="#" id="exitLink">ВЫХОД</a>
+        </div>
+      </div>
+
+      <div id="app"></div>
     </div>
   </div>
 
 <script>
-/** ---------- Архетипы ---------- */
+/* ===================== Data ===================== */
 const ARCHETYPES = {
-  gatekeeper: "Хранитель Порога",
-  spark: "Носитель Искры",
-  namer: "Дающий Имя",
-  support: "Несущий Опору",
-  connector: "Связующий",
-  breaker: "Разрушитель Форм",
-  integrator: "Собиратель Осколков",
-  wanderer: "Странствующий Путник"
+  gatekeeper: "ХРАНИТЕЛЬ ПОРОГА",
+  spark: "НОСИТЕЛЬ ИСКРЫ",
+  namer: "ДАЮЩИЙ ИМЯ",
+  support: "НЕСУЩИЙ ОПОРУ",
+  connector: "СВЯЗУЮЩИЙ",
+  breaker: "РАЗРУШИТЕЛЬ ФОРМ",
+  integrator: "СОБИРАТЕЛЬ ОСКОЛКОВ",
+  wanderer: "СТРАНСТВУЮЩИЙ ПУТНИК"
 };
 
 const ARCH_SHORT = {
@@ -193,7 +341,6 @@ const ARCH_SHORT = {
   wanderer: "путь · движение · баланс через переход"
 };
 
-/** ---------- Тексты результатов (новые, психологические, без «ты») ---------- */
 const RESULT_TEXTS = {
   gatekeeper: {
     dominant:
@@ -261,21 +408,14 @@ const RESULT_TEXTS = {
   }
 };
 
-/** ---------- 24 вопроса: 3 блока (dominant / shadow / deficit) ---------- */
-/**
- * Важно:
- * - block хранится в вопросе
- * - каждый ответ ведёт к одному архетипу (a)
- * - порядок вопросов и ответов перемешивается
- */
 const QUESTIONS = [
-  // --- Блок 1: DOMINANT (8) ---
+  // --- DOMINANT ---
   { id: 1, block: "dominant", text: "Ты выходишь к тёмному лесу. Дальше — неизвестно. У самой границы стоит изба на курьих ножках.",
     answers: [
       { t: "Остановиться и прислушаться: пускают ли дальше.", a: "gatekeeper" },
       { t: "Сделать шаг, даже если впереди непонятно.", a: "wanderer" },
       { t: "Поступить не по правилам и войти неожиданно.", a: "breaker" },
-      { t: "Искать проводника и держаться связи.", a: "connector" },
+      { t: "Искать проводника и держаться связи.", a: "connector" }
     ]
   },
   { id: 2, block: "dominant", text: "Ночью в саду вспыхивает странный свет, как будто что-то зовёт.",
@@ -283,7 +423,7 @@ const QUESTIONS = [
       { t: "Пойти за светом: если зов есть — значит, пора.", a: "spark" },
       { t: "Попытаться понять, что это значит и к чему ведёт.", a: "namer" },
       { t: "Сохранить устойчивость: не трогать неизвестное.", a: "support" },
-      { t: "Подождать: вдруг это не знак, а случайность.", a: "gatekeeper" },
+      { t: "Подождать: вдруг это не знак, а случайность.", a: "gatekeeper" }
     ]
   },
   { id: 3, block: "dominant", text: "Путь оказывается долгим и тяжёлым. Быстрых решений нет.",
@@ -291,7 +431,7 @@ const QUESTIONS = [
       { t: "Продолжать шаг за шагом, сколько бы ни заняло.", a: "support" },
       { t: "Разобраться в смысле происходящего, чтобы действовать точнее.", a: "namer" },
       { t: "Сломать привычный способ и сделать по-своему.", a: "breaker" },
-      { t: "Держать контакт с теми, кто рядом, чтобы не распалось.", a: "connector" },
+      { t: "Держать контакт с теми, кто рядом, чтобы не распалось.", a: "connector" }
     ]
   },
   { id: 4, block: "dominant", text: "Становится ясно: прежний порядок больше не работает.",
@@ -299,7 +439,7 @@ const QUESTIONS = [
       { t: "Принять это как часть пути и идти дальше.", a: "wanderer" },
       { t: "Демонтаж старых правил: больше так нельзя.", a: "breaker" },
       { t: "Сохранить хотя бы базовую устойчивость и ритм.", a: "support" },
-      { t: "Собрать себя после изменения и продолжать уже иначе.", a: "integrator" },
+      { t: "Собрать себя после изменения и продолжать уже иначе.", a: "integrator" }
     ]
   },
   { id: 5, block: "dominant", text: "Ты оказываешься между двумя сторонами, которые не слышат друг друга.",
@@ -307,7 +447,7 @@ const QUESTIONS = [
       { t: "Остаться мостом и удерживать контакт.", a: "connector" },
       { t: "Выбрать путь и идти дальше, не втягиваясь.", a: "wanderer" },
       { t: "Разорвать узел: пусть каждый сам.", a: "breaker" },
-      { t: "Остановить ситуацию рамкой: дальше так нельзя.", a: "gatekeeper" },
+      { t: "Остановить ситуацию рамкой: дальше так нельзя.", a: "gatekeeper" }
     ]
   },
   { id: 6, block: "dominant", text: "Происходит утрата: что-то важное разрушено, и привычного больше нет.",
@@ -315,7 +455,7 @@ const QUESTIONS = [
       { t: "Дать себе время прожить и собрать себя заново.", a: "integrator" },
       { t: "Искать новый импульс, чтобы двигаться дальше.", a: "spark" },
       { t: "Держаться за остатки стабильности и продолжать.", a: "support" },
-      { t: "Понять, что это значит и чему учит.", a: "namer" },
+      { t: "Понять, что это значит и чему учит.", a: "namer" }
     ]
   },
   { id: 7, block: "dominant", text: "Все говорят: «Так принято. Делай как все».",
@@ -323,7 +463,7 @@ const QUESTIONS = [
       { t: "Сделать иначе, даже если это выглядит странно.", a: "breaker" },
       { t: "Сначала проверить: есть ли право и готовность идти против.", a: "gatekeeper" },
       { t: "Действовать внутри правил: так надёжнее.", a: "support" },
-      { t: "Идти своим путём без спора и доказательств.", a: "wanderer" },
+      { t: "Идти своим путём без спора и доказательств.", a: "wanderer" }
     ]
   },
   { id: 8, block: "dominant", text: "Распутье без указателей. Непонятно, какая дорога «правильная».",
@@ -331,17 +471,17 @@ const QUESTIONS = [
       { t: "Идти, принимая, что путь меняет по ходу.", a: "wanderer" },
       { t: "Ждать внутреннего отклика и импульса начала.", a: "spark" },
       { t: "Прояснить смысл выбора, прежде чем идти.", a: "namer" },
-      { t: "Проверить готовность к следующему шагу.", a: "gatekeeper" },
+      { t: "Проверить готовность к следующему шагу.", a: "gatekeeper" }
     ]
   },
 
-  // --- Блок 2: SHADOW (8) ---
+  // --- SHADOW ---
   { id: 9, block: "shadow", text: "Лес смыкается, тропа теряется. Страшно и непонятно, что дальше.",
     answers: [
       { t: "Никого не подпускать: так безопаснее.", a: "gatekeeper" },
       { t: "Идти наугад, лишь бы не стоять.", a: "wanderer" },
       { t: "Резко сломать всё, чтобы вырваться из ощущения ловушки.", a: "breaker" },
-      { t: "Схватиться за того, кто рядом, и не отпускать связь.", a: "connector" },
+      { t: "Схватиться за того, кто рядом, и не отпускать связь.", a: "connector" }
     ]
   },
   { id: 10, block: "shadow", text: "От тебя ждут решения, а сил почти нет.",
@@ -349,7 +489,7 @@ const QUESTIONS = [
       { t: "Тянуть дальше через изнеможение: иначе всё рухнет.", a: "support" },
       { t: "Ждать знака/импульса: без него не сдвинуться.", a: "spark" },
       { t: "Уйти в размышления, откладывая шаг.", a: "namer" },
-      { t: "Оборвать процесс: лучше прекратить, чем мучиться.", a: "breaker" },
+      { t: "Оборвать процесс: лучше прекратить, чем мучиться.", a: "breaker" }
     ]
   },
   { id: 11, block: "shadow", text: "Кто-то нарушает договор и причиняет боль.",
@@ -357,7 +497,7 @@ const QUESTIONS = [
       { t: "Разорвать связь сразу и навсегда.", a: "breaker" },
       { t: "Удерживать связь любой ценой.", a: "connector" },
       { t: "Закрыться и больше никого не подпускать.", a: "gatekeeper" },
-      { t: "Молчаливо переживать и тянуть внутри.", a: "integrator" },
+      { t: "Молчаливо переживать и тянуть внутри.", a: "integrator" }
     ]
   },
   { id: 12, block: "shadow", text: "Долгая ответственность без поддержки. Никто не сменяет.",
@@ -365,7 +505,7 @@ const QUESTIONS = [
       { t: "Продолжать тащить: иначе всё рухнет.", a: "support" },
       { t: "Надеяться на внезапный «спасительный» толчок или знак.", a: "spark" },
       { t: "Уйти, бросив всё как есть.", a: "wanderer" },
-      { t: "Пытаться найти оправдание и объяснение происходящему.", a: "namer" },
+      { t: "Пытаться найти оправдание и объяснение происходящему.", a: "namer" }
     ]
   },
   { id: 13, block: "shadow", text: "Мир требует быть «правильным», и это давит.",
@@ -373,7 +513,7 @@ const QUESTIONS = [
       { t: "Действовать наперекор всем, только чтобы не подчиняться.", a: "breaker" },
       { t: "Сжаться и перестать проявляться.", a: "gatekeeper" },
       { t: "Объяснить и рационализировать, почему всё так.", a: "namer" },
-      { t: "Исчезнуть в дороге/делах, чтобы не сталкиваться.", a: "wanderer" },
+      { t: "Исчезнуть в дороге/делах, чтобы не сталкиваться.", a: "wanderer" }
     ]
   },
   { id: 14, block: "shadow", text: "Утрата ещё жива, но времени на остановку нет.",
@@ -381,7 +521,7 @@ const QUESTIONS = [
       { t: "Не чувствовать и просто продолжать.", a: "integrator" },
       { t: "Схватиться за новое, чтобы не оставаться в боли.", a: "spark" },
       { t: "Держаться за остатки прежнего, не отпуская.", a: "support" },
-      { t: "Ломать всё вокруг, лишь бы не чувствовать.", a: "breaker" },
+      { t: "Ломать всё вокруг, лишь бы не чувствовать.", a: "breaker" }
     ]
   },
   { id: 15, block: "shadow", text: "Ты между двумя сторонами, и обе тянут на себя.",
@@ -389,7 +529,7 @@ const QUESTIONS = [
       { t: "Начать управлять ими, чтобы удержать ситуацию.", a: "connector" },
       { t: "Резко выбрать одну сторону и отрезать другую.", a: "breaker" },
       { t: "Уйти и оставить их разбираться самим.", a: "wanderer" },
-      { t: "Запретить конфликт вообще, задав жёсткую рамку.", a: "gatekeeper" },
+      { t: "Запретить конфликт вообще, задав жёсткую рамку.", a: "gatekeeper" }
     ]
   },
   { id: 16, block: "shadow", text: "Долго нет ощущения смысла, и это начинает давить.",
@@ -397,17 +537,17 @@ const QUESTIONS = [
       { t: "Искать объяснение каждому шагу.", a: "namer" },
       { t: "Ждать сильного зова, который «всё изменит».", a: "spark" },
       { t: "Механически продолжать: делать своё без вопросов.", a: "support" },
-      { t: "Резко всё разрушить, потому что «так больше нельзя».", a: "breaker" },
+      { t: "Резко всё разрушить, потому что «так больше нельзя».", a: "breaker" }
     ]
   },
 
-  // --- Блок 3: DEFICIT (8) ---
+  // --- DEFICIT ---
   { id: 17, block: "deficit", text: "Новый этап требует отпустить старое. Это непросто.",
     answers: [
       { t: "Сначала прояснить, что именно отпускается и зачем.", a: "namer" },
       { t: "Сделать шаг в новое, даже без гарантий.", a: "wanderer" },
       { t: "Опереться на устойчивость и держать то, что работает.", a: "support" },
-      { t: "Поставить границу: вход только при готовности.", a: "gatekeeper" },
+      { t: "Поставить границу: вход только при готовности.", a: "gatekeeper" }
     ]
   },
   { id: 18, block: "deficit", text: "Появляется ощущение «хочется нового», но непонятно, с чего начать.",
@@ -415,7 +555,7 @@ const QUESTIONS = [
       { t: "Следовать импульсу: начать с малого, но начать.", a: "spark" },
       { t: "Дать этому форму словами: понять, что именно хочется.", a: "namer" },
       { t: "Сохранить стабильность и не раскачивать лодку.", a: "support" },
-      { t: "Срезать лишние правила и сделать иначе, чем принято.", a: "breaker" },
+      { t: "Срезать лишние правила и сделать иначе, чем принято.", a: "breaker" }
     ]
   },
   { id: 19, block: "deficit", text: "Снова поднимается старая боль. Важно не повторить прежний сценарий.",
@@ -423,7 +563,7 @@ const QUESTIONS = [
       { t: "Дать себе прожить и собрать опыт в целое.", a: "integrator" },
       { t: "Сделать шаг вперёд: путь лечит движением.", a: "wanderer" },
       { t: "Выстроить границы, чтобы больше не ранило.", a: "gatekeeper" },
-      { t: "Найти контакт/поддержку и не оставаться одному.", a: "connector" },
+      { t: "Найти контакт/поддержку и не оставаться одному.", a: "connector" }
     ]
   },
   { id: 20, block: "deficit", text: "Чьи-то действия мягко нарушают границы, но прямого конфликта нет.",
@@ -431,7 +571,7 @@ const QUESTIONS = [
       { t: "Обозначить границу и остановить это.", a: "gatekeeper" },
       { t: "Сохранить контакт и договориться.", a: "connector" },
       { t: "Разорвать форму взаимодействия и сделать по-другому.", a: "breaker" },
-      { t: "Продолжать спокойно, не делая резких шагов.", a: "support" },
+      { t: "Продолжать спокойно, не делая резких шагов.", a: "support" }
     ]
   },
   { id: 21, block: "deficit", text: "Становится ясно: старые правила не работают. Нужна перестройка.",
@@ -439,7 +579,7 @@ const QUESTIONS = [
       { t: "Демонтировать лишнее и освободить место для нового.", a: "breaker" },
       { t: "Удержать базовую устойчивость, пока всё меняется.", a: "support" },
       { t: "Понять, какие смыслы теперь актуальны.", a: "namer" },
-      { t: "Начать путь заново, принимая переход.", a: "wanderer" },
+      { t: "Начать путь заново, принимая переход.", a: "wanderer" }
     ]
   },
   { id: 22, block: "deficit", text: "Долго приходится идти одному, и становится тяжело.",
@@ -447,7 +587,7 @@ const QUESTIONS = [
       { t: "Разрешить поддержке появиться: удерживать контакт.", a: "connector" },
       { t: "Продолжать держать курс и ритм.", a: "support" },
       { t: "Двигаться дальше, меняя среду и маршрут.", a: "wanderer" },
-      { t: "Остановиться и проверить, что безопасно и уместно.", a: "gatekeeper" },
+      { t: "Остановиться и проверить, что безопасно и уместно.", a: "gatekeeper" }
     ]
   },
   { id: 23, block: "deficit", text: "Происходит что-то странное и непонятное. Внутри много сигналов.",
@@ -455,7 +595,7 @@ const QUESTIONS = [
       { t: "Назвать происходящее и собрать картину смысла.", a: "namer" },
       { t: "Дать себе время прожить и переварить.", a: "integrator" },
       { t: "Следовать импульсу: начать действие, чтобы прояснилось.", a: "spark" },
-      { t: "Сократить лишнее и сохранить безопасность.", a: "gatekeeper" },
+      { t: "Сократить лишнее и сохранить безопасность.", a: "gatekeeper" }
     ]
   },
   { id: 24, block: "deficit", text: "Всё стало слишком «на автомате». Нужно вернуть живость.",
@@ -463,12 +603,12 @@ const QUESTIONS = [
       { t: "Искать искру и запускать движение.", a: "spark" },
       { t: "Собрать себя: восстановить контакт с переживаниями.", a: "integrator" },
       { t: "Сменить маршрут: выйти в путь и обновить опыт.", a: "wanderer" },
-      { t: "Пересобрать форму: убрать лишнее и сделать иначе.", a: "breaker" },
+      { t: "Пересобрать форму: убрать лишнее и сделать иначе.", a: "breaker" }
     ]
   }
 ];
 
-/** ---------- Логика приложения ---------- */
+/* ===================== App State ===================== */
 const app = document.getElementById("app");
 
 const state = {
@@ -479,7 +619,10 @@ const state = {
     dominant: initScore(),
     shadow: initScore(),
     deficit: initScore()
-  }
+  },
+  view: "start", // start | test | result
+  resultStep: 0, // 0 dom, 1 shadow, 2 deficit
+  result: null
 };
 
 function initScore(){
@@ -488,7 +631,6 @@ function initScore(){
     connector: 0, breaker: 0, integrator: 0, wanderer: 0
   };
 }
-
 function shuffle(arr){
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--){
@@ -497,25 +639,28 @@ function shuffle(arr){
   }
   return a;
 }
-
-function reset(){
+function resetTest(){
   state.idx = 0;
   state.picks = [];
   state.scores = { dominant: initScore(), shadow: initScore(), deficit: initScore() };
   state.order = shuffle([...Array(QUESTIONS.length).keys()]);
+  state.view = "test";
+  state.resultStep = 0;
+  state.result = null;
   render();
 }
-
-function progressPct(){
-  return Math.round((state.idx / QUESTIONS.length) * 100);
+function goHome(){
+  state.view = "start";
+  state.order = [];
+  state.idx = 0;
+  state.picks = [];
+  state.scores = { dominant: initScore(), shadow: initScore(), deficit: initScore() };
+  state.resultStep = 0;
+  state.result = null;
+  render();
 }
-
-function addScore(block, archetype){
-  state.scores[block][archetype] += 1;
-}
-function removeScore(block, archetype){
-  state.scores[block][archetype] -= 1;
-}
+function addScore(block, archetype){ state.scores[block][archetype] += 1; }
+function removeScore(block, archetype){ state.scores[block][archetype] -= 1; }
 
 function pickAnswer(answerObj){
   const qIndex = state.order[state.idx];
@@ -523,9 +668,13 @@ function pickAnswer(answerObj){
   state.picks[state.idx] = { qId: q.id, block: q.block, archetype: answerObj.a };
   addScore(q.block, answerObj.a);
   state.idx += 1;
+  if (state.idx >= QUESTIONS.length){
+    state.result = computeResult();
+    state.view = "result";
+    state.resultStep = 0;
+  }
   render();
 }
-
 function goBack(){
   if (state.idx <= 0) return;
   const prev = state.picks[state.idx - 1];
@@ -535,29 +684,7 @@ function goBack(){
   render();
 }
 
-function argMax(obj){
-  let bestK = null;
-  let bestV = -Infinity;
-  for (const [k,v] of Object.entries(obj)){
-    if (v > bestV){ bestV = v; bestK = k; }
-  }
-  return bestK;
-}
-function argMin(obj){
-  let bestK = null;
-  let bestV = Infinity;
-  for (const [k,v] of Object.entries(obj)){
-    if (v < bestV){ bestV = v; bestK = k; }
-  }
-  return bestK;
-}
-
 function computeResult(){
-  const dom = state.scores.dominant;
-  const sh  = state.scores.shadow;
-  const def = state.scores.deficit;
-
-  // tie-break: случайно из равных
   function tieBreakMax(obj){
     const max = Math.max(...Object.values(obj));
     const ks = Object.entries(obj).filter(([,v]) => v === max).map(([k]) => k);
@@ -568,35 +695,68 @@ function computeResult(){
     const ks = Object.entries(obj).filter(([,v]) => v === min).map(([k]) => k);
     return ks[Math.floor(Math.random()*ks.length)];
   }
-
-  const dominant = tieBreakMax(dom);
-  const shadow = tieBreakMax(sh);
-  const deficit = tieBreakMin(def);
-
-  return { dominant, shadow, deficit };
+  return {
+    dominant: tieBreakMax(state.scores.dominant),
+    shadow: tieBreakMax(state.scores.shadow),
+    deficit: tieBreakMin(state.scores.deficit)
+  };
+}
+function pct(){
+  return Math.round((state.idx / QUESTIONS.length) * 100);
 }
 
-/** ---------- Рендеры ---------- */
+/* ===================== UI Templates ===================== */
 function renderStart(){
   app.innerHTML = `
-    <div class="brand">архетип · 24</div>
-    <h1>Тест архетипов: доминирующий / тень / дефицит</h1>
-    <p class="lead">
-      24 ситуации. Выбор интуитивный: первый отклик важнее «правильного ответа».
-      Вопросы и варианты ответов перемешиваются.
-    </p>
-    <p class="note">
-      Результат покажет три позиции: как проявляется стратегия в обычном режиме,
-      как она искажается под давлением, и какая сила сейчас недоиспользуется.
-    </p>
-    <div class="spacer"></div>
-    <div class="row">
-      <button class="btn" id="startBtn">Начать</button>
-      <span class="pill">Вопросов: ${QUESTIONS.length}</span>
-      <span class="pill">Блоки: 3</span>
+    <div class="main">
+      <div>
+        <div class="kicker">ТЕСТ НА 24 ВОПРОСА</div>
+        <div class="bigTitle">КАРТА АРХЕТИПОВ</div>
+        <div class="divider"></div>
+        <p class="bodyText">
+          24 ситуации. Выбор лучше делать интуитивно — первый отклик обычно точнее.
+          Вопросы и варианты ответов каждый раз перемешиваются.
+        </p>
+        <div class="controls">
+          <button class="btn" id="startBtn">НАЧАТЬ</button>
+          <button class="linkBtn" id="howBtn">КАК СЧИТАЕТСЯ</button>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="sideBlock">
+          <div class="sideLabel">Что получится</div>
+          <p class="sideText">
+            Результат показывает три позиции:
+            <br>— доминирующую стратегию
+            <br>— то, как она искажается под давлением (тень)
+            <br>— и силу, которая сейчас недоиспользуется (дефицит).
+          </p>
+        </div>
+        <div class="sideBlock">
+          <div class="sideLabel">Важное</div>
+          <p class="sideText">
+            Здесь нет «правильных» ответов.
+            Это не диагноз, а способ увидеть привычные реакции.
+          </p>
+          <div class="miniRow">
+            <span class="pill">Вопросов: ${QUESTIONS.length}</span>
+            <span class="pill">Архетипов: 8</span>
+            <span class="pill">Блоков: 3</span>
+          </div>
+        </div>
+      </div>
     </div>
   `;
-  document.getElementById("startBtn").onclick = reset;
+
+  document.getElementById("startBtn").onclick = resetTest;
+  document.getElementById("howBtn").onclick = () => alert(
+`Подсчёт ведётся отдельно по трём блокам.
+— Доминирующий: максимум в блоке «dominant»
+— Тень: максимум в блоке «shadow»
+— Дефицит: минимум в блоке «deficit»
+Вопросы перемешиваются, но метки блоков остаются в данных.`
+  );
 }
 
 function renderQuestion(){
@@ -604,123 +764,160 @@ function renderQuestion(){
   const q = QUESTIONS[qIndex];
 
   const answers = shuffle(q.answers);
-  const pct = progressPct();
+  const p = pct();
 
-  const blockLabel = (q.block === "dominant") ? "Блок: доминирующий"
-                   : (q.block === "shadow")   ? "Блок: тень"
-                   : "Блок: дефицит";
+  // Скрываем блоки пользователю для «слепоты», но оставим тонкую подсказку прогресса.
+  const kicker =
+    (state.idx < 8)  ? "ПЕРВАЯ ЧАСТЬ"
+  : (state.idx < 16) ? "ВТОРАЯ ЧАСТЬ"
+  :                   "ТРЕТЬЯ ЧАСТЬ";
 
   app.innerHTML = `
-    <div class="row">
-      <span class="pill">Вопрос ${state.idx + 1} из ${QUESTIONS.length}</span>
-      <span class="pill">${blockLabel}</span>
-      <span class="pill">${pct}%</span>
-    </div>
-    <div class="progress"><div class="bar" style="width:${pct}%;"></div></div>
+    <div class="main">
+      <div>
+        <div class="kicker">${kicker} · ${state.idx + 1}/${QUESTIONS.length}</div>
+        <div class="bigTitle" style="font-size: clamp(30px, 4.2vw, 44px); letter-spacing:.02em;">
+          ${q.text}
+        </div>
 
-    <div class="qtitle">${q.text}</div>
-    <div class="answers" id="answers"></div>
+        <div class="progressLine"><i style="width:${p}%;"></i></div>
 
-    <div class="btnRow">
-      <button class="btn" id="backBtn" ${state.idx === 0 ? "disabled" : ""}>Назад</button>
-      <span class="mini muted">Выбирать лучше быстро: первый отклик обычно точнее.</span>
+        <div class="answers" id="answers"></div>
+
+        <div class="controls">
+          <button class="linkBtn" id="backBtn" ${state.idx === 0 ? "disabled" : ""}>НАЗАД</button>
+          <button class="linkBtn" id="restartBtn">ЗАНОВО</button>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="sideBlock">
+          <div class="sideLabel">Как отвечать</div>
+          <p class="sideText">
+            Выбирать лучше быстро. Если хочется «посчитать», стоит выбрать первый отклик.
+          </p>
+        </div>
+        <div class="sideBlock">
+          <div class="sideLabel">Подсказка</div>
+          <p class="sideText">
+            Если два варианта кажутся равными — выбрать тот, который ближе по ощущению сейчас.
+          </p>
+          <div class="miniRow">
+            <span class="pill">Прогресс: ${p}%</span>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 
   const answersEl = document.getElementById("answers");
   answers.forEach((a) => {
-    const btn = document.createElement("button");
-    btn.className = "choice";
-    btn.type = "button";
-    btn.textContent = a.t;
-    btn.onclick = () => pickAnswer(a);
-    answersEl.appendChild(btn);
+    const el = document.createElement("div");
+    el.className = "choice";
+    el.tabIndex = 0;
+    el.innerHTML = `<span class="bullet"></span><span class="choiceText">${a.t}</span>`;
+    el.onclick = () => pickAnswer(a);
+    el.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") pickAnswer(a); };
+    answersEl.appendChild(el);
   });
 
-  document.getElementById("backBtn").onclick = goBack;
+  const backBtn = document.getElementById("backBtn");
+  if (backBtn) backBtn.onclick = goBack;
+  document.getElementById("restartBtn").onclick = resetTest;
 }
 
 function renderResult(){
-  const r = computeResult();
+  const r = state.result;
 
-  const domName = ARCHETYPES[r.dominant];
-  const shName  = ARCHETYPES[r.shadow];
-  const defName = ARCHETYPES[r.deficit];
+  const steps = [
+    { key: "dominant", title: "ВЫ РЕАЛИЗУЕТЕСЬ ЧЕРЕЗ АРХЕТИП", btn: "ДАЛЬШЕ" },
+    { key: "shadow",   title: "ПОД ДАВЛЕНИЕМ ВКЛЮЧАЕТСЯ",     btn: "ДАЛЬШЕ" },
+    { key: "deficit",  title: "СЕЙЧАС НЕДОИСПОЛЬЗУЕТСЯ",      btn: "ЗАВЕРШИТЬ" }
+  ];
+
+  const step = steps[state.resultStep];
+  const archKey = r[step.key];
+  const archName = ARCHETYPES[archKey];
+  const subtitle = ARCH_SHORT[archKey];
+
+  const text =
+    (step.key === "dominant") ? RESULT_TEXTS[archKey].dominant :
+    (step.key === "shadow")   ? RESULT_TEXTS[archKey].shadow :
+                                RESULT_TEXTS[archKey].deficit;
 
   app.innerHTML = `
-    <div class="brand">результат</div>
-    <h1>Карта стратегий</h1>
+    <div class="main">
+      <div>
+        <div class="kicker">${step.title}</div>
+        <div class="bigTitle">${archName}</div>
+        <div class="divider"></div>
+        <p class="bodyText">${text}</p>
 
-    <div class="grid2">
-      <div class="card" style="background:linear-gradient(180deg, rgba(15,23,32,.92), rgba(12,19,27,.96)); border-radius:16px; padding:18px; box-shadow:none; border:1px solid rgba(232,238,246,.14);">
-        <div class="sectionTitle">Доминирующий</div>
-        <div class="resultTitle">${domName}</div>
-        <div class="mini muted">${ARCH_SHORT[r.dominant]}</div>
-        <div class="hr"></div>
-        <div class="mini">${RESULT_TEXTS[r.dominant].dominant}</div>
-      </div>
-
-      <div class="card" style="background:linear-gradient(180deg, rgba(15,23,32,.92), rgba(12,19,27,.96)); border-radius:16px; padding:18px; box-shadow:none; border:1px solid rgba(232,238,246,.14);">
-        <div class="sectionTitle">Тень</div>
-        <div class="resultTitle">${shName}</div>
-        <div class="mini muted">${ARCH_SHORT[r.shadow]}</div>
-        <div class="hr"></div>
-        <div class="mini">${RESULT_TEXTS[r.shadow].shadow}</div>
-      </div>
-
-      <div class="card" style="background:linear-gradient(180deg, rgba(15,23,32,.92), rgba(12,19,27,.96)); border-radius:16px; padding:18px; box-shadow:none; border:1px solid rgba(232,238,246,.14);">
-        <div class="sectionTitle">Дефицит</div>
-        <div class="resultTitle">${defName}</div>
-        <div class="mini muted">${ARCH_SHORT[r.deficit]}</div>
-        <div class="hr"></div>
-        <div class="mini">${RESULT_TEXTS[r.deficit].deficit}</div>
-      </div>
-
-      <div class="card" style="background:linear-gradient(180deg, rgba(15,23,32,.92), rgba(12,19,27,.96)); border-radius:16px; padding:18px; box-shadow:none; border:1px solid rgba(232,238,246,.14);">
-        <div class="sectionTitle">Под давлением</div>
-        <div class="mini">
-          Если доминирующий и тень совпали — стратегия, скорее всего, перегружена.
-          Если дефицит стабильно повторяется у разных людей — это место для развития формулировок блока 3.
-        </div>
-        <div class="spacer"></div>
-        <div class="mini muted">
-          Подсчёт идёт отдельно по трём блокам. Вопросы перемешаны, но логика сохранена.
+        <div class="controls">
+          <button class="btn" id="nextBtn">${step.btn}</button>
+          <button class="linkBtn" id="againBtn">ЗАНОВО</button>
         </div>
       </div>
-    </div>
 
-    <div class="spacer"></div>
-    <div class="row">
-      <button class="btn" id="againBtn">Пройти ещё раз</button>
-      <button class="btn" id="homeBtn">На старт</button>
-      <span class="pill">Вопросов: ${QUESTIONS.length}</span>
+      <div class="side">
+        <div class="sideBlock">
+          <div class="sideLabel">Ключ</div>
+          <p class="sideText">${subtitle}</p>
+        </div>
+
+        <div class="sideBlock">
+          <div class="sideLabel">Навигация</div>
+          <p class="sideText">
+            Результат показывается в три шага: доминирующий → тень → дефицит.
+          </p>
+          <div class="miniRow">
+            <span class="pill">Шаг: ${state.resultStep + 1}/3</span>
+          </div>
+        </div>
+
+        <div class="sideBlock">
+          <div class="sideLabel">Дальше</div>
+          <p class="sideText">
+            Это карта стратегий, а не приговор.
+            Формулировки можно уточнять — тест будет развиваться.
+          </p>
+        </div>
+      </div>
     </div>
   `;
 
-  document.getElementById("againBtn").onclick = reset;
-  document.getElementById("homeBtn").onclick = () => {
-    state.idx = 0;
-    state.picks = [];
-    state.scores = { dominant: initScore(), shadow: initScore(), deficit: initScore() };
-    state.order = [];
-    render();
+  document.getElementById("againBtn").onclick = resetTest;
+  document.getElementById("nextBtn").onclick = () => {
+    if (state.resultStep < 2){
+      state.resultStep += 1;
+      render();
+    } else {
+      goHome();
+    }
   };
 }
 
-function render(){
-  if (!state.order.length && state.idx === 0 && state.picks.length === 0){
-    renderStart();
-    return;
-  }
-  if (state.idx < QUESTIONS.length){
-    renderQuestion();
-    return;
-  }
-  renderResult();
-}
+/* ===================== Links ===================== */
+document.getElementById("aboutLink").onclick = (e) => {
+  e.preventDefault();
+  alert("Раздел «Об архетипах» можно сделать отдельной страницей позже. Сейчас — заглушка.");
+};
+document.getElementById("settingsLink").onclick = (e) => {
+  e.preventDefault();
+  alert("Настройки (например, показать/скрыть подсказки) можно добавить позже. Сейчас — заглушка.");
+};
+document.getElementById("exitLink").onclick = (e) => {
+  e.preventDefault();
+  goHome();
+};
 
-// init
-renderStart();
+/* ===================== Render Router ===================== */
+function render(){
+  if (state.view === "start") renderStart();
+  else if (state.view === "test") renderQuestion();
+  else renderResult();
+}
+render();
 </script>
 </body>
 </html>
