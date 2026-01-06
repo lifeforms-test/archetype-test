@@ -7,12 +7,13 @@
 
   <style>
     :root{
-      --bg:#070a0e;
+      --bg:#0b1118;
       --ink:#e9ecef;
       --muted:rgba(233,236,239,.72);
       --dim:rgba(233,236,239,.48);
       --line:rgba(233,236,239,.18);
       --line2:rgba(233,236,239,.26);
+      --glow: rgba(233,236,239,.18);
       --max:1120px;
       --pad:28px;
       --pad2:22px;
@@ -137,12 +138,19 @@
 
     .bigTitle{
       font-family: var(--serif);
-      font-weight: 600;
+      font-weight: 400;
       letter-spacing: .04em;
       text-transform: uppercase;
-      font-size: clamp(38px, 6vw, 66px);
-      line-height: 1.02;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.08;
       margin: 6px 0 18px;
+    }
+    .questionTitle{
+      font-size: clamp(24px, 3.6vw, 36px);
+      letter-spacing: .02em;
+      line-height: 1.16;
+      font-weight: 400;
+      text-transform: none;
     }
 
     .bodyText{
@@ -256,6 +264,9 @@
       font-size: 12px;
       cursor:pointer;
       transition: background .12s ease, border-color .12s ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
     }
     .btn:hover{
       border-color: rgba(233,236,239,.35);
@@ -264,6 +275,22 @@
     .btn:disabled{
       opacity: .4;
       cursor:not-allowed;
+    }
+    .btnAuthor{
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      background: rgba(255,255,255,.04);
+      border-color: rgba(233,236,239,.3);
+      box-shadow: 0 0 12px var(--glow);
+      padding: 10px 16px;
+      min-width: 190px;
+    }
+    .btnAuthor .btnSub{
+      font-size: 11px;
+      letter-spacing: .04em;
+      text-transform: none;
+      color: var(--muted);
     }
     .linkBtn{
       border: none;
@@ -291,11 +318,53 @@
       height: 1px;
       width: 0%;
       background: rgba(233,236,239,.72);
+      box-shadow: 0 0 8px var(--glow);
     }
 
     /* Small helper */
     .muted{ color: var(--muted); }
     .hidden{ display:none !important; }
+
+    /* ======= Results ======= */
+    .resultTitle{
+      margin-bottom: 6px;
+      text-transform: none;
+      letter-spacing: .02em;
+    }
+    .resultSub{
+      font-family: var(--mono);
+      text-transform: none;
+      letter-spacing: .06em;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .resultText{
+      font-size: 15px;
+      line-height: 1.75;
+      margin: 0 0 10px;
+    }
+    .resultSteps{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 6px 0 2px;
+    }
+    .resultStep{
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(255,255,255,.02);
+    }
+    .resultStep.is-active{
+      color: var(--ink);
+      border-color: var(--line2);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 0 10px var(--glow);
+    }
   </style>
 </head>
 
@@ -320,25 +389,54 @@
 <script>
 /* ===================== Data ===================== */
 const ARCHETYPES = {
-  gatekeeper: "ХРАНИТЕЛЬ ПОРОГА",
-  spark: "НОСИТЕЛЬ ИСКРЫ",
-  namer: "ДАЮЩИЙ ИМЯ",
-  support: "НЕСУЩИЙ ОПОРУ",
-  connector: "СВЯЗУЮЩИЙ",
-  breaker: "РАЗРУШИТЕЛЬ ФОРМ",
-  integrator: "СОБИРАТЕЛЬ ОСКОЛКОВ",
-  wanderer: "СТРАНСТВУЮЩИЙ ПУТНИК"
-};
-
-const ARCH_SHORT = {
-  gatekeeper: "границы · допуск · защита целостности",
-  spark: "инициация · оживление · начало движения",
-  namer: "смысл · называние · оформление переживания",
-  support: "удержание · ответственность · продолжение",
-  connector: "контакт · поле между · удержание связи",
-  breaker: "разрыв · демонтаж ложного · освобождение",
-  integrator: "проживание · интеграция · сборка после распада",
-  wanderer: "путь · движение · баланс через переход"
+  gatekeeper: {
+    id: "gatekeeper",
+    role: "Хранитель Порога",
+    character: "Баба-Яга",
+    short: "границы · допуск · защита целостности"
+  },
+  spark: {
+    id: "spark",
+    role: "Носитель Искры",
+    character: "Жар-птица",
+    short: "инициация · оживление · начало движения"
+  },
+  namer: {
+    id: "namer",
+    role: "Дающий Имя",
+    character: "Василиса Премудрая",
+    short: "смысл · называние · оформление переживания"
+  },
+  support: {
+    id: "support",
+    role: "Несущий Опору",
+    character: "Сивка-Бурка",
+    short: "удержание · ответственность · продолжение"
+  },
+  connector: {
+    id: "connector",
+    role: "Связующий",
+    character: "Серый Волк",
+    short: "контакт · поле между · удержание связи"
+  },
+  breaker: {
+    id: "breaker",
+    role: "Разрушитель Форм",
+    character: "",
+    short: "разрыв · демонтаж ложного · освобождение"
+  },
+  integrator: {
+    id: "integrator",
+    role: "Собиратель Осколков",
+    character: "",
+    short: "проживание · интеграция · сборка после распада"
+  },
+  wanderer: {
+    id: "wanderer",
+    role: "Странствующий Путник",
+    character: "",
+    short: "путь · движение · баланс через переход"
+  }
 };
 
 const RESULT_TEXTS = {
@@ -719,6 +817,10 @@ function renderStart(){
         </p>
         <div class="controls">
           <button class="btn" id="startBtn">НАЧАТЬ</button>
+          <button class="btn btnAuthor" id="authorBtn">
+            <span>АВТОР ПРОЕКТА</span>
+            <span class="btnSub">@Ket1yPerry</span>
+          </button>
           <button class="linkBtn" id="howBtn">КАК СЧИТАЕТСЯ</button>
         </div>
       </div>
@@ -750,6 +852,9 @@ function renderStart(){
   `;
 
   document.getElementById("startBtn").onclick = resetTest;
+  document.getElementById("authorBtn").onclick = () => {
+    window.open("https://t.me/Ket1yPerry", "_blank", "noopener,noreferrer");
+  };
   document.getElementById("howBtn").onclick = () => alert(
 `Подсчёт ведётся отдельно по трём блокам.
 — Доминирующий: максимум в блоке «dominant»
@@ -776,7 +881,7 @@ function renderQuestion(){
     <div class="main">
       <div>
         <div class="kicker">${kicker} · ${state.idx + 1}/${QUESTIONS.length}</div>
-        <div class="bigTitle" style="font-size: clamp(30px, 4.2vw, 44px); letter-spacing:.02em;">
+        <div class="bigTitle questionTitle">
           ${q.text}
         </div>
 
@@ -837,8 +942,8 @@ function renderResult(){
 
   const step = steps[state.resultStep];
   const archKey = r[step.key];
-  const archName = ARCHETYPES[archKey];
-  const subtitle = ARCH_SHORT[archKey];
+  const archetype = ARCHETYPES[archKey];
+  const subtitle = archetype.short;
 
   const text =
     (step.key === "dominant") ? RESULT_TEXTS[archKey].dominant :
@@ -849,9 +954,10 @@ function renderResult(){
     <div class="main">
       <div>
         <div class="kicker">${step.title}</div>
-        <div class="bigTitle">${archName}</div>
+        <div class="bigTitle resultTitle">${archetype.role}</div>
+        ${archetype.character ? `<div class="resultSub">${archetype.character}</div>` : ""}
         <div class="divider"></div>
-        <p class="bodyText">${text}</p>
+        <p class="bodyText resultText">${text}</p>
 
         <div class="controls">
           <button class="btn" id="nextBtn">${step.btn}</button>
@@ -863,6 +969,15 @@ function renderResult(){
         <div class="sideBlock">
           <div class="sideLabel">Ключ</div>
           <p class="sideText">${subtitle}</p>
+        </div>
+
+        <div class="sideBlock">
+          <div class="sideLabel">Разделы</div>
+          <div class="resultSteps">
+            <div class="resultStep ${step.key === "dominant" ? "is-active" : ""}">Доминирующий</div>
+            <div class="resultStep ${step.key === "shadow" ? "is-active" : ""}">Тень</div>
+            <div class="resultStep ${step.key === "deficit" ? "is-active" : ""}">Дефицит</div>
+          </div>
         </div>
 
         <div class="sideBlock">
