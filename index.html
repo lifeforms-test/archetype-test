@@ -954,8 +954,9 @@ function renderResult(){
     <div class="main">
       <div>
         <div class="kicker">${step.title}</div>
-        <div class="bigTitle resultTitle">${archetype.role}</div>
-        ${archetype.character ? `<div class="resultSub">${archetype.character}</div>` : ""}
+        <div class="bigTitle resultTitle">
+  ${archetype.character || archetype.role}
+</div>
         <div class="divider"></div>
         <p class="bodyText resultText">${text}</p>
 
