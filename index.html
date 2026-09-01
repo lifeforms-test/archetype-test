@@ -1122,7 +1122,14 @@ function renderResult(){
     </div>
   `;
 
-  document.getElementById("againBtn").onclick = resetTest;
+  const prevResultBtn = document.getElementById("prevResultBtn");
+
+if (prevResultBtn) {
+  prevResultBtn.onclick = () => {
+    state.resultStep -= 1;
+    render();
+  };
+}
   document.querySelectorAll(".resultStep").forEach((btn) => {
   btn.onclick = () => {
     state.resultStep = Number(btn.dataset.step);
