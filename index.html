@@ -356,16 +356,25 @@
       gap: 8px;
       margin: 6px 0 2px;
     }
-    .resultStep{
-      border: 1px solid var(--line);
-      padding: 10px 12px;
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      background: rgba(255,255,255,.02);
-    }
+   .resultStep{
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: rgba(255,255,255,.02);
+  cursor: pointer;
+}
+
+.resultStep:hover{
+  border-color: var(--line2);
+  color: var(--ink);
+  background: rgba(255,255,255,.035);
+}
     .resultStep.is-active{
       color: var(--ink);
       border-color: var(--line2);
