@@ -1147,6 +1147,12 @@ function renderResult(){
   `;
 
   document.getElementById("againBtn").onclick = resetTest;
+  document.querySelectorAll(".resultStep").forEach((btn) => {
+  btn.onclick = () => {
+    state.resultStep = Number(btn.dataset.step);
+    render();
+  };
+});
   document.getElementById("nextBtn").onclick = () => {
     if (state.resultStep < 2){
       state.resultStep += 1;
