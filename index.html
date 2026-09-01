@@ -1103,10 +1103,10 @@ function renderResult(){
         <div class="divider"></div>
         <p class="bodyText resultText">${text}</p>
 
-        <div class="controls">
-          <button class="btn" id="nextBtn">${step.btn}</button>
-          <button class="linkBtn" id="againBtn">ЗАНОВО</button>
-        </div>
+       <div class="controls">
+  ${state.resultStep > 0 ? '<button class="linkBtn" id="prevResultBtn">НАЗАД</button>' : ''}
+  <button class="btn" id="nextBtn">${step.btn}</button>
+</div>
       </div>
 
       <div class="side">
