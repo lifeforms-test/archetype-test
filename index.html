@@ -1255,7 +1255,12 @@ document.getElementById("aboutLink").onclick = (e) => {
     </div>
   `;
 
-  document.getElementById("aboutBackBtn").onclick = goHome;
+   document.getElementById("aboutBackBtn").onclick = goHome;
+};
+
+document.getElementById("exitLink").onclick = (e) => {
+  e.preventDefault();
+  goHome();
 };
 
 /* ===================== Render Router ===================== */
@@ -1264,7 +1269,9 @@ function render(){
   else if (state.view === "test") renderQuestion();
   else renderResult();
 }
+
 render();
 </script>
 </body>
+</html>
 </html>
