@@ -1015,17 +1015,11 @@ function renderQuestion(){
   const answers = shuffle(q.answers);
   const p = pct();
 
-  const kicker =
-    (q.block === "dominant") ? "ПЕРВАЯ ЧАСТЬ"
-  : (q.block === "shadow")   ? "ВТОРАЯ ЧАСТЬ"
-  :                           "ТРЕТЬЯ ЧАСТЬ";
-
   app.innerHTML = `
     <div class="main">
       <div>
-        <div class="kicker">${kicker} · ${state.idx + 1}/${QUESTIONS.length}</div>
+        <div class="kicker">ВОПРОС ${state.idx + 1}/${QUESTIONS.length}</div>
         <div class="bigTitle questionTitle">${q.text}</div>
-
         <div class="progressLine"><i style="width:${p}%;"></i></div>
 
         <div class="answers" id="answers"></div>
