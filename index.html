@@ -1118,11 +1118,11 @@ function renderResult(){
       <div class="side">
         <div class="sideBlock">
           <div class="sideLabel">Разделы</div>
-          <div class="resultSteps">
-            <div class="resultStep ${step.key === "dominant" ? "is-active" : ""}">Доминирующий</div>
-            <div class="resultStep ${step.key === "shadow" ? "is-active" : ""}">Тень</div>
-            <div class="resultStep ${step.key === "deficit" ? "is-active" : ""}">Дефицит</div>
-          </div>
+        <div class="resultSteps">
+  <button class="resultStep ${step.key === "dominant" ? "is-active" : ""}" data-step="0">Доминирующий</button>
+  <button class="resultStep ${step.key === "shadow" ? "is-active" : ""}" data-step="1">Архетип испытания</button>
+  <button class="resultStep ${step.key === "deficit" ? "is-active" : ""}" data-step="2">Дефицитарный</button>
+</div>
         </div>
 
         <div class="sideBlock">
